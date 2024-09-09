@@ -8,7 +8,7 @@ def execute_query(query):
         host="localhost",
         database="sympuf",  # Nombre de tu base de datos
         user="postgres",
-        password="Guadalix12_!",
+        password="psswd",
         port= "7777"
     )
     cur = conn.cursor()
