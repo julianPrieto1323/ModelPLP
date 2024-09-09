@@ -1,0 +1,59 @@
+# Ignorar archivos de Python compilados
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignorar entornos virtuales
+venv/
+env/
+.venv
+
+# Ignorar archivos de configuración de IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Ignorar archivos de configuración de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de base de datos
+*.sqlite3
+*.db
+
+# Ignorar archivos de log
+*.log
+
+# Ignorar archivos temporales
+*.tmp
+*.swp
+*.swo
+
+# Ignorar configuraciones de Anaconda
+*.condarc
+*.env
+*.yml
+
+# Ignorar archivos de dependencias
+Pipfile.lock
+requirements.txt
+
+# Ignorar archivos generados por el sistema de build
+build/
+dist/
+*.egg-info/
+
+# Ignorar archivos de pruebas
+coverage/
+*.cover
+nosetests.xml
+*.coverage
+*.hypothesis/
+
+# Ignorar configuraciones específicas de contenedores
+*.dockerignore
+*.docker/
