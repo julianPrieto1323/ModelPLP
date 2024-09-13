@@ -70,3 +70,5 @@ Para instalar, estos paquetes puedes ejecutar:
 **Personalización**
 
 Este proyecto está diseñado para ser flexible y adaptable. Puedes cambiar las tablas, las columnas y las condiciones para ajustar el análisis a tus necesidades. Además, puedes experimentar con diferentes algoritmos de clasificación en `plp.py` para mejorar la precisión del modelo.
+
+El dataset utilizado en este proyecto se encuentra en https://www.kaggle.com/datasets/drscarlat/cmssynpuf55m se ha usado la carpeta Synthea27Nj_5.4. En esta carpeta se encuentran los archivos CSV que forman la BBDD.
