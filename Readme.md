@@ -88,4 +88,4 @@ This project is designed to be flexible and customizable. You can change the tab
 
 ## Dataset 
 
-The dataset used is located at https://www.kaggle.com/datasets/drscarlat/cmssynpuf55m and the CSV set in the Synthea folder has been used.
+The dataset used is located at [datasets](https://github.com/OHDSI/EunomiaDatasets/tree/3efd533eb95a41a56d5b0758b0d7c8fa57e1303e/datasets) and the CSV set in the Synthea folder has been used.

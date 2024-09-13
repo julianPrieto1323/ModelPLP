@@ -1,11 +1,17 @@
 [project]
-name = "IRyCIS_atlas"
+name = "ModelPLP"
 version = "0.1"
-description = "Atlas alternative"
+description = "Model PLP"
 authors = [
     {name = "julianPrieto1323", email = "julian.prieto1323@gmail.com"},
 ]
-dependencies = []
+dependencies = [
+    "pandas>=2.0.3",
+    "scikit-learn>=1.3.2",
+    "duckdb>=1.1.0",
+    "orjson>=3.10.7",
+    "jupyter>=1.1.1",
+]
 requires-python = ">=3.8"
 readme = "README.md"
 license = {text = "MIT"}

@@ -1,19 +1,9 @@
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from src import peticiones, plp, cohortes
-#peticiones.crear_bbdd_desde_csv('data/Eunomia/Synthea27Nj_5.4', 'data/Eunomia/Synthea27Nj_5.4_BBDD')
-'''
-####################################################
-####################################################
-            CREACIÓN DE COHORTES
-####################################################
-####################################################
+from src import plp, miscelania
 
-'''
 # Parámetros de ejemplo
 db_path = 'data/Eunomia/synthea27nj_5.4_bbdd'
+
+#peticiones.crear_bbdd_desde_csv('data/Eunomia/Synthea27Nj_5.4', 'data/Eunomia/Synthea27Nj_5.4_BBDD')
 
 # Parámetros para la cohorte target
 target_tables = ['person', 'VISIT_DETAIL']
@@ -37,34 +27,10 @@ feature_columns = ['person.person_id', 'person.year_of_birth', 'VISIT_DETAIL.vis
 # Definir tabla de outcome (target) y condiciones
 target_table = 'CONDITION_ERA'
 target_join_column = 'person.person_id = CONDITION_ERA.person_id'
-target_condition = 'CONDITION_ERA.condition_concept_id = 201826'  # Ejemplo: Diabetes
+target_condition = 'CONDITION_ERA.condition_concept_id = 201826'  # Ejemplo: Diabetes Milletius de tipo 2
 
 # Ejecutar el PLP
-import json
-from achilles import Achilles
+results = plp.run_plp_with_algorithms(db_path, target_tables, target_join_columns, target_conditions, outcome_tables, outcome_join_columns, outcome_conditions, 
+                                  feature_tables, feature_join_columns, feature_conditions, feature_columns, target_table, target_join_column, target_condition)
 
-# Cargar la configuración de ACHILLES
-config = {
-    "data_source": "data/Eunomia/synthea27nj_5.4_bbdd",  # Reemplaza con el nombre de tu fuente de datos
-    "data_format": "omop_cdm"  # Reemplaza con el formato correcto de tus datos (OMOP CDM)
-}
-
-# Crear un objeto ACHILLES
-achilles = Achilles(config)
-
-# Evaluar la calidad de los datos
-quality_report = achilles.run()
-
-# Mostrar el informe de calidad
-print(quality_report)
-
-# Ejemplo de uso: Calificar la calidad de los datos según diferentes métricas
-metrics = {
-    "data_distribution": quality_report["data_distribution"],
-    "missing_values": quality_report["missing_values"]
-}
-
-# Calcular un score de calidad general
-score = achilles.calculate_score(metrics)
-
-print(f"Score de calidad: {score:.2f}")
+miscelania.print_study_summary(feature_columns, target_condition, results)
