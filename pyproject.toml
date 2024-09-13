@@ -1,0 +1,19 @@
+[project]
+name = "IRyCIS_atlas"
+version = "0.1"
+description = "Atlas alternative"
+authors = [
+    {name = "julianPrieto1323", email = "julian.prieto1323@gmail.com"},
+]
+dependencies = []
+requires-python = ">=3.8"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
