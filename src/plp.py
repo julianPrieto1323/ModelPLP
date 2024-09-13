@@ -50,8 +50,8 @@ def run_plp_with_algorithms(db_path, target_tables, target_join_columns, target_
         "Decision Tree": DecisionTreeClassifier(class_weight='balanced'),
         "Random Forest": RandomForestClassifier(class_weight='balanced'),
         "Logistic Regression": LogisticRegression(class_weight='balanced', max_iter=1000),
-        "SVM": SVC(class_weight='balanced'),
-        "MLP Classifier": MLPClassifier(max_iter=1000)
+        #"SVM": SVC(class_weight='balanced'),
+        #"MLP Classifier": MLPClassifier(max_iter=1000)
     }
 
     results = {}
@@ -64,7 +64,7 @@ def run_plp_with_algorithms(db_path, target_tables, target_join_columns, target_
         
         # Calcular precisión y reporte de clasificación
         accuracy = accuracy_score(y_test, y_pred)
-        report = classification_report(y_test, y_pred, zero_division=0)
+        report = classification_report(y_test, y_pred, output_dict=True, zero_division=0)
         
         results[name] = {
             "model": model,

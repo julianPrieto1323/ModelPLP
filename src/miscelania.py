@@ -19,11 +19,11 @@ def print_study_summary(feature_columns, target_condition, model_results):
     print("\nSe han entrenado y evaluado los siguientes modelos:")
     
     # Iterar sobre los resultados de los modelos
-    for model_name, (accuracy, report) in model_results.items():
+    for model_name, metricas in model_results.items():
         print(f"\nModelo: {model_name}")
-        print(f"  - Precisión: {accuracy:.4f}")
+        print(f"  - Precisión: {metricas['accuracy']:.4f}")
         print("  - Reporte de clasificación:")
-        print(report)
+        print(metricas['report'])
 
     # Análisis de los resultados
     print("\n**** ANÁLISIS DE RESULTADOS ****")
@@ -36,22 +36,25 @@ def print_study_summary(feature_columns, target_condition, model_results):
 
     # Comparación entre modelos
     print("**Análisis comparativo de los modelos:**")
-    for model_name, (accuracy, report) in model_results.items():
+    for model_name, metricas in model_results.items():
         print(f"\nModelo: {model_name}")
-        print(f"  - Rendimiento general: La precisión del modelo es de {accuracy:.4f}.")
-        if accuracy >= 0.85:
+        print(f"  - Rendimiento general: La precisión del modelo es de {metricas['accuracy']:.4f}.")
+        if metricas['accuracy'] >= 0.85:
             print("    Este es un valor bastante bueno, lo que indica que el modelo es capaz de realizar predicciones precisas en la mayoría de los casos.")
         else:
             print("    El valor de precisión es aceptable, pero se podría mejorar con ajustes adicionales al modelo o los datos.")
-
+        
+        report_dict = metricas['report']
         # Análisis del F1-Score
-        if "1" in report:
-            f1_score_positive = report.split("1")[1].split()[-2]
-            print(f"  - F1-Score para los casos positivos: {f1_score_positive}")
-            if float(f1_score_positive) >= 0.80:
+        if '1' in report_dict:
+            f1_score_positive = report_dict['1']['f1-score']
+            print(f"  - F1-Score para los casos positivos: {f1_score_positive:.4f}")
+            if f1_score_positive >= 0.80:
                 print("    Un F1-Score elevado indica que el modelo tiene un buen equilibrio entre precisión y recall para los casos positivos.")
             else:
                 print("    Un F1-Score bajo indica que el modelo tiene dificultades para equilibrar precisión y recall en los casos positivos.")
+        else:
+            print("    El modelo no predijo ningún caso positivo.")
     
     print("\nConclusión general:")
     print("Los resultados muestran que algunos modelos, como el Árbol de Decisión o el Bosque Aleatorio, tienen un buen rendimiento con una precisión y F1-Score elevados. Sin embargo, otros modelos pueden requerir ajustes adicionales en los hiperparámetros o más datos para mejorar su rendimiento.")
