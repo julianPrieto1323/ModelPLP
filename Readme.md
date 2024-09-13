@@ -43,7 +43,7 @@ Se extraen características de los pacientes, como visitas médicas, prescripcio
 
 **5. Evaluación del Modelo:** Se evalúa el rendimiento del modelo utilizando métricas de `precisión`, `recall` y `F1-score`.
 
-## Instrucciones para Ejecutar el Proyecto**
+## Instrucciones para Ejecutar el Proyecto
 
 **1. Requisitos Previos:** 
 
