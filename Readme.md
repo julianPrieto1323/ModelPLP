@@ -1,76 +1,91 @@
+# Patient Level Prediction (PLP) Project
 
-# Proyecto de Predicción a Nivel de Paciente (PLP)
+This project implements a Patient Level Prediction (PLP) study using the Observational Medical Outcomes Partnership (OMOP) data model. The objective of the study is to predict a clinical outcome from predictor variables derived from patient data.
 
-Este proyecto implementa un estudio de Predicción a Nivel de Paciente (PLP) utilizando el modelo de datos OMOP (Observational Medical Outcomes Partnership). El objetivo del estudio es predecir un desenlace clínico a partir de variables predictorias derivadas de datos de pacientes.
+## Project Structure
+The project source code is organized in the **src** folder, which contains three main scripts:
 
-## Estructura del Proyecto
-El código fuente del proyecto está organizado en la carpeta **src**, que contiene tres scripts principales:
+**1. requests.py**:
 
-**1. peticiones.py**:
-
-Este script contiene las funciones para realizar solicitudes a la base de datos. Permite la extracción de datos necesarios para la creación de cohortes y la obtención de variables predictorias.
+This script contains the functions for making requests to the database. It allows the extraction of data needed to create cohorts and obtain predictor variables.
 
 **2. cohortes.py**
 
-Define las funciones para la creación de cohortes de pacientes (target cohort y outcome cohort) y la extracción de las variables predictorias (predictive features). Estos datos son fundamentales para ejecutar el estudio PLP.
+Defines the functions for the creation of patient cohorts (target cohort and outcome cohort) and the extraction of predictive features. These data are essential for running the PLP study.
 
-**Funciones principales:**
-- create_cohort: Crea una cohorte de pacientes a partir de las tablas, columnas y condiciones proporcionadas.
-- extract_predictive_features: Extrae las variables predictorias, seleccionando las características relevantes para la predicción.
+Main functions:** ** Create_cohort: Creates a cohort
+- create_cohort: Creates a cohort of patients from the tables, columns and conditions provided.
+- extract_predictive_features: Extract the predictive variables, selecting the relevant features for prediction.
 
 **3. plp.py**
 
-Este script ejecuta el estudio PLP y entrena un modelo de clasificación, evaluando su rendimiento.
+This script runs the PLP study and trains a classification model, evaluating its performance.
 
-**Funciones principales:**
+**4. miscelania.py**
 
-- **run_plp**: Realiza todo el flujo del estudio PLP. Incluye la creación de cohortes, la extracción de las características predictorias, el entrenamiento del modelo de predicción y la evaluación de su precisión.
+This script shows metrics from the algorithims ran on the plp study.
 
-## Flujo del Proyecto
+**Main functions:**
 
-**1. Extracción de Datos:** Se extraen las cohortes de pacientes de la base de datos mediante las funciones en `cohortes.py`, utilizando las tablas y condiciones especificadas.
+- **run_plp_with_algorithms**: Performs the entire PLP study flow. It includes creating cohorts, extracting the predictive features, training the prediction model and evaluating its accuracy. The algorithims are: Decision Tree, Random Forest, Logistic Regression, SVM, MLP Classifier.
 
-**2. Creación de Cohortes:**
+## Project Flow
 
-**- Target Cohort:** Define la población de pacientes objetivo para el estudio.
+**1. Data Extraction:** 
 
-**- Outcome Cohort:** Define el desenlace clínico que se desea predecir (por ejemplo, diagnóstico de una enfermedad).
+Patient cohorts are extracted from the database using the functions in `cohortes.py`, using the specified tables and conditions.
 
-**3. Extracción de Variables Predictorias:**
-Se extraen características de los pacientes, como visitas médicas, prescripciones de medicamentos y condiciones previas, que se utilizarán como variables de entrada en el modelo.
+**2. Cohort Creation:** 
 
-**4. Entrenamiento del Modelo:** El script `plp.py` entrena un modelo de clasificación basado en los datos de entrada, utilizando un algoritmo como el árbol de decisión de `scikit-learn`.
+Target Cohort
 
-**5. Evaluación del Modelo:** Se evalúa el rendimiento del modelo utilizando métricas de `precisión`, `recall` y `F1-score`.
+**- Target Cohort:** 
+Defines the target patient population for the study.
 
-## Instrucciones para Ejecutar el Proyecto
+**- Outcome Cohort:** 
 
-**1. Requisitos Previos:** 
+Defines the clinical outcome to be predicted (e.g. diagnosis of a disease).
 
-- Instalar `duckdb` para la gestión de la base de datos.
-- Instalar `scikit-learn` para el entrenamiento y evaluación del modelo.
-- Instalar `pandas` para el manejo de los DataFrames.
+**3. Extraction of Predictor Variables:** 
 
-Para instalar, estos paquetes puedes ejecutar:
+Patient characteristics, such as medical visits, medication prescriptions and previous conditions, are extracted and will be used as input variables in the model.
 
-`pip install duckdb scikit-learn pandas
-`
+**4. Model Training:** 
 
-**2.- Ejecutar el Estudio:**
+The `plp.py` script trains a classification model based on the input data, using an algorithm such as the `scikit-learn` decision tree.
 
-- Configura las tablas y condiciones para las cohortes y variables predictorias en los scripts correspondientes.
+**5. Model Evaluation:** 
 
-- Ejecuta el notebook principal para entrenar el modelo y obtener los resultados:
+Model performance is evaluated using `accuracy`, `recall` and `F1-score` metrics.
+
+
+## Instructions for Executing the Project
+
+**1. Prerequisites:** 
+
+- Install `duckdb` for database management.
+- Install `scikit-learn` for model training and evaluation.
+- Install `pandas` for DataFrames management.
+
+To install these packages you can run
+
+`pip install duckdb scikit-learn pandas`
+
+**Execute the Study:**
+
+- Set up the tables and conditions for the cohorts and predictor variables in the corresponding scripts.
+
+- Run the main notebook to train the model and obtain the results:
 
 `main.ipynb`
 
-**3. Evaluación de Resultados:**
-- El script `plp.py` imprimirá las métricas del modelo, **precisión**, **recall** y **F1-score**.
+**3. Evaluation of Results:**
+- The `miscelania.py` script will print the model metrics, **precision**, **recall** and **F1-score**.
 
-## Personalización
+## Customization
 
-Este proyecto está diseñado para ser flexible y adaptable. Puedes cambiar las tablas, las columnas y las condiciones para ajustar el análisis a tus necesidades. Además, puedes experimentar con diferentes algoritmos de clasificación en `plp.py` para mejorar la precisión del modelo.
+This project is designed to be flexible and customizable. You can change the tables, columns and conditions to adjust the analysis to your needs. In addition, you can experiment with different sorting algorithms in `plp.py` to improve the accuracy of the model.
 
 ## Dataset 
 
-El dataset utilizado se encuentra en https://www.kaggle.com/datasets/drscarlat/cmssynpuf55m y se ha usado el conjunto de CSV que están en la carpeta Synthea
+The dataset used is located at https://www.kaggle.com/datasets/drscarlat/cmssynpuf55m and the CSV set in the Synthea folder has been used.
