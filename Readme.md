@@ -26,7 +26,7 @@ Este script ejecuta el estudio PLP y entrena un modelo de clasificación, evalua
 
 - **run_plp**: Realiza todo el flujo del estudio PLP. Incluye la creación de cohortes, la extracción de las características predictorias, el entrenamiento del modelo de predicción y la evaluación de su precisión.
 
-**Flujo del Proyecto**
+## Flujo del Proyecto
 
 **1. Extracción de Datos:** Se extraen las cohortes de pacientes de la base de datos mediante las funciones en `cohortes.py`, utilizando las tablas y condiciones especificadas.
 
@@ -43,7 +43,7 @@ Se extraen características de los pacientes, como visitas médicas, prescripcio
 
 **5. Evaluación del Modelo:** Se evalúa el rendimiento del modelo utilizando métricas de `precisión`, `recall` y `F1-score`.
 
-**Instrucciones para Ejecutar el Proyecto**
+## Instrucciones para Ejecutar el Proyecto**
 
 **1. Requisitos Previos:** 
 
@@ -67,8 +67,8 @@ Para instalar, estos paquetes puedes ejecutar:
 **3. Evaluación de Resultados:**
 - El script `plp.py` imprimirá las métricas del modelo, **precisión**, **recall** y **F1-score**.
 
-**Personalización**
+## Personalización
 
 Este proyecto está diseñado para ser flexible y adaptable. Puedes cambiar las tablas, las columnas y las condiciones para ajustar el análisis a tus necesidades. Además, puedes experimentar con diferentes algoritmos de clasificación en `plp.py` para mejorar la precisión del modelo.
-
+## Dataset
 El dataset utilizado en este proyecto se encuentra en https://www.kaggle.com/datasets/drscarlat/cmssynpuf55m se ha usado la carpeta Synthea27Nj_5.4. En esta carpeta se encuentran los archivos CSV que forman la BBDD.
