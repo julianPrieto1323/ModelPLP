@@ -60,9 +60,9 @@ Para instalar, estos paquetes puedes ejecutar:
 
 - Configura las tablas y condiciones para las cohortes y variables predictorias en los scripts correspondientes.
 
-- Ejecuta el script principal para entrenar el modelo y obtener los resultados:
+- Ejecuta el notebook principal para entrenar el modelo y obtener los resultados:
 
-`python main.py`
+`main.ipynb`
 
 **3. Evaluación de Resultados:**
 - El script `plp.py` imprimirá las métricas del modelo, **precisión**, **recall** y **F1-score**.
