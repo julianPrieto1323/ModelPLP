@@ -190,6 +190,7 @@ def crearDirectorio(save_path):
 def loadSynthea(save_path):
     '''
     Descarga el dataset Synthea del repositorio https://github.com/OHDSI/EunomiaDatasets y lo guarda en la carpeta que se pasa por parámetro
+    Además, se queda solo con los archivos necesarios y elimina todos los archivos extras del repo.
     '''
 
     repo_url = "https://github.com/OHDSI/EunomiaDatasets"
