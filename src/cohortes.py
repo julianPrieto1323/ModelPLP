@@ -1,25 +1,28 @@
 import duckdb
+import usoBBDD
 
-def create_cohort(db_path, tables, join_columns, where_conditions, cohort_name):
+
+def create_cohort(db_path, tables, where_conditions, cohort_name):
     """
     Crea una cohorte en una base de datos DuckDB a partir de tablas y condiciones proporcionadas.
 
     :param db_path: Ruta al archivo de base de datos DuckDB.
     :param tables: Lista de nombres de tablas a combinar.
-    :param join_columns: Lista de pares de columnas para unir las tablas. Cada par debe ser una tupla (tabla1_columna, tabla2_columna).
-    :param where_conditions: Lista de condiciones SQL para filtrar los datos. Cada condición debe ser una cadena SQL.
+    :param where_conditions: Lista de condiciones SQL para filtrar los datos.
     :param cohort_name: Nombre de la tabla de cohorte resultante (opcional).
     :return: DataFrame con la cohorte resultante.
     """
     # Conectar a la base de datos
     con = duckdb.connect(database=db_path, read_only=False)
     
+    # Generar las condiciones de JOIN basadas en los atributos comunes (como "person_id")
+    joins_clause = usoBBDD.generar_joins(db_path, tables)
+
     # Crear la cláusula de combinación de tablas
     if len(tables) > 1:
         tables_clause = f'"{tables[0]}"'
         for i in range(1, len(tables)):
-            join_condition = join_columns[i-1]
-            tables_clause += f' LEFT JOIN "{tables[i]}" ON {join_condition}'
+            tables_clause += f' LEFT JOIN "{tables[i]}" ON {joins_clause}'
     else:
         tables_clause = tables[0]
     
@@ -48,9 +51,9 @@ def create_cohort(db_path, tables, join_columns, where_conditions, cohort_name):
     
     return result
 
-def create_target_outcome_cohorts(db_path, target_tables, target_join_columns, target_conditions,
-                                   outcome_tables, outcome_join_columns, outcome_conditions,
-                                   target_cohort_name='target_cohort', outcome_cohort_name='outcome_cohort'):
+def create_target_outcome_cohorts(db_path, target_tables, target_conditions,
+                                   outcome_tables, outcome_conditions,
+                                   target_cohort_name, outcome_cohort_name):
     """
     Crea las cohortes de objetivo y de resultado en una base de datos DuckDB a partir de tablas y condiciones proporcionadas.
 
@@ -66,14 +69,14 @@ def create_target_outcome_cohorts(db_path, target_tables, target_join_columns, t
     :return: Tupla de DataFrames con las cohortes de objetivo y de resultado.
     """
     # Crear la cohorte de objetivo
-    target_cohort_df = create_cohort(db_path, target_tables, target_join_columns, target_conditions, target_cohort_name)
+    target_cohort_df = create_cohort(db_path, target_tables, target_conditions, target_cohort_name)
     
     # Crear la cohorte de resultado
-    outcome_cohort_df = create_cohort(db_path, outcome_tables, outcome_join_columns, outcome_conditions, outcome_cohort_name)
+    outcome_cohort_df = create_cohort(db_path, outcome_tables, outcome_conditions, outcome_cohort_name)
     
     return target_cohort_df, outcome_cohort_df
 
-def extract_predictive_features_with_target(db_path, tables, join_columns, where_conditions, feature_columns, target_table, target_join_column, target_condition, cohort_name='predictive_features'):
+def extract_predictive_features_with_target(db_path, tables, where_conditions, feature_columns, target_table, target_join_column, target_condition, cohort_name):
     """
     Extrae las variables predictorias de una base de datos DuckDB y añade la columna 'target' a partir de una tabla de outcomes.
 
@@ -92,6 +95,11 @@ def extract_predictive_features_with_target(db_path, tables, join_columns, where
     # Conectar a la base de datos
     con = duckdb.connect(database=db_path, read_only=False)
     
+    if len(tables) > 0:
+        join_columns = []
+        for i in range(0, len(tables) - 1):
+           join_columns.append(tables[i] + '.person_id')
+
     # Crear la cláusula de combinación de tablas (features)
     if len(tables) > 1:
         tables_clause = f'"{tables[0]}"'
