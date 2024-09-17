@@ -89,3 +89,36 @@ This project is designed to be flexible and customizable. You can change the tab
 ## Dataset 
 
 The dataset used is located at [datasets](https://github.com/OHDSI/EunomiaDatasets/tree/3efd533eb95a41a56d5b0758b0d7c8fa57e1303e/datasets) and the CSV set in the Synthea folder has been used.
+
+
+## Usage/Examples
+This section describes the principal funtions of the repository
+
+### Downloading dataset
+The function loadSynthea lets you download the dataset Synthea to try the API with a CDM Dataset
+```python
+import peticiones from src
+peticiones.loadSynthea(path) 
+```
+### Creating a cohort
+This function lets you create a cohort from the full Dataset with specific characteristics
+
+```python
+import cohortes from src
+cohortes.create_cohort(db_path, conditions, cohort_name) 
+```
+### Extract predictive features
+This function lets you extract the predictives variables from a Database specifying the target feature.
+
+```python
+import cohortes from src
+cohortes.extract_predictive_features_with_target(db_path, cohort_name, target) 
+```
+
+### Cohort to pandas
+This function lets you convert the cohorts created to a pandas dataframe to use it for PLP study.
+
+```python
+import cohortes from src
+cohortes.cohort_to_pd(cohort_name) 
+```
