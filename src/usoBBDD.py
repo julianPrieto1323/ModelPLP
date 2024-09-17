@@ -20,7 +20,7 @@ def conexionBBDD(bbdd, tabla):
     except Exception as e:
         print(f"Error al conectar a la base de datos: {e}")
         return None
-    
+        
 def ejecutar_query(bbdd, query):
     """
     Ejecuta una consulta SQL en una base de datos DuckDB y devuelve el resultado como un DataFrame.
@@ -134,7 +134,6 @@ def crear_bbdd_desde_csv(carpeta_csv, ruta_bbdd):
     conn.close()
     print(f"Base de datos creada en {ruta_bbdd}")
 
-
 def eliminar_tabla(db_path, table_name):
     """
     Elimina una tabla de la base de datos DuckDB.
@@ -147,7 +146,7 @@ def eliminar_tabla(db_path, table_name):
         None
     """
     # Conectar a la base de datos DuckDB
-    conn = duckdb.connect(database=db_path, read_only=False)
+    conn = duckdb.connect(database=db_path, read_only=True)
 
     try:
         # Verificar si la tabla existe
@@ -175,23 +174,36 @@ def eliminar_tabla(db_path, table_name):
         # Cerrar la conexión
         conn.close()
 
+def obtener_columnas(db_path, tabla):
+    """
+    Obtiene todas las columnas de una tabla de la base de datos.
+    
+    :param db_path: Ruta de la base de datos.
+    :param tabla: Nombre de la tabla.
+    :return: Lista de nombres de columnas de la tabla.
+    """
+    con = duckdb.connect(database=db_path, read_only=True)
+    query = f"DESCRIBE {tabla};"
+    columnas_df = con.execute(query).df()
+    con.close()
+    return columnas_df['column_name'].tolist()
+
 def identificar_columnas_id(columnas):
     """
-    Identifica las columnas que contienen "id" o "_id" en sus nombres.
-
-    :param columnas: Lista de nombres de columnas.
-    :return: Lista de columnas que son identificadores.
+    Filtra las columnas que contienen "id" o "_id".
+    
+    :param columnas: Lista de columnas de una tabla.
+    :return: Lista de columnas que contienen "id" o "_id".
     """
-    columnas_id = [col for col in columnas if 'id' in col.lower() or '_id' in col.lower()]
-    return columnas_id
+    return [col for col in columnas if 'id' in col.lower() or '_id' in col.lower()]
 
 def generar_joins(db_path, tablas):
     """
     Genera las condiciones de `JOIN` entre tablas basadas en las columnas en común que contienen "id" o "_id".
-
+    
     :param db_path: Ruta de la base de datos.
     :param tablas: Lista de nombres de tablas a unir.
-    :return: Cláusulas de JOIN para unir las tablas.
+    :return: Tuple con cláusulas de JOIN y las condiciones de unión.
     """
     # Diccionario para almacenar las columnas de id por tabla
     columnas_por_tabla = {}
@@ -203,6 +215,8 @@ def generar_joins(db_path, tablas):
         columnas_por_tabla[tabla] = columnas_id
     
     joins = []
+    join_conditions = []
+    
     # Comparar tablas para encontrar columnas en común y generar JOINs
     for i in range(len(tablas) - 1):
         for j in range(i + 1, len(tablas)):
@@ -211,27 +225,15 @@ def generar_joins(db_path, tablas):
             
             # Buscar columnas id en común
             columnas_comunes = set(columnas_por_tabla[tabla1]).intersection(columnas_por_tabla[tabla2])
+            if columnas_comunes:
+                print(f"Columnas comunes entre {tabla1} y {tabla2}: {columnas_comunes}")
             
+            # Generar las condiciones de JOIN
             for columna in columnas_comunes:
                 join_condition = f'{tabla1}.{columna} = {tabla2}.{columna}'
+                join_conditions.append(join_condition)
                 joins.append(join_condition)
     
-    return ' AND '.join(joins)  # Unir las condiciones de JOIN con AND
-
-
-def obtener_columnas(db_path, tabla):
-    """
-    Obtiene las columnas de una tabla en DuckDB.
-
-    :param db_path: Ruta de la base de datos.
-    :param tabla: Nombre de la tabla de la que se obtendrán las columnas.
-    :return: Lista de columnas de la tabla.
-    """
-    con = duckdb.connect(database=db_path)
-    query = f"DESCRIBE {tabla}"
-    result = con.execute(query).fetchdf()
-    con.close()
-    
-    # Obtener la lista de nombres de columnas
-    return list(result['column_name'])
-
+    # Unir las condiciones de JOIN con ' AND ' y eliminar posibles duplicados
+    joins = list(set(joins))
+    return ' AND '.join(joins), join_conditions

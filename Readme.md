@@ -25,6 +25,10 @@ This script runs the PLP study and trains a classification model, evaluating its
 
 This script shows metrics from the algorithims ran on the plp study.
 
+**usoBBDD.py**
+
+This script lets you execute querys to the DataBase
+
 **Main functions:**
 
 - **run_plp_with_algorithms**: Performs the entire PLP study flow. It includes creating cohorts, extracting the predictive features, training the prediction model and evaluating its accuracy. The algorithims are: Decision Tree, Random Forest, Logistic Regression, SVM, MLP Classifier.
@@ -49,15 +53,6 @@ Defines the clinical outcome to be predicted (e.g. diagnosis of a disease).
 **3. Extraction of Predictor Variables:** 
 
 Patient characteristics, such as medical visits, medication prescriptions and previous conditions, are extracted and will be used as input variables in the model.
-
-**4. Model Training:** 
-
-The `plp.py` script trains a classification model based on the input data, using an algorithm such as the `scikit-learn` decision tree.
-
-**5. Model Evaluation:** 
-
-Model performance is evaluated using `accuracy`, `recall` and `F1-score` metrics.
-
 
 ## Instructions for Executing the Project
 
