@@ -51,18 +51,13 @@ def create_cohort(db_path, tables, where_conditions, cohort_name):
     
     return result
 
-def create_target_outcome_cohorts(db_path, target_tables, target_conditions,
-                                   outcome_tables, outcome_conditions,
-                                   target_cohort_name, outcome_cohort_name):
+def create_target_outcome_cohorts(db_path, target_tables, target_conditions, outcome_tables, outcome_conditions, target_cohort_name, outcome_cohort_name):
     """
     Crea las cohortes de objetivo y de resultado en una base de datos DuckDB a partir de tablas y condiciones proporcionadas.
 
     :param db_path: Ruta al archivo de base de datos DuckDB.
-    :param target_tables: Lista de nombres de tablas para la cohorte de objetivo.
     :param target_join_columns: Lista de pares de columnas para unir las tablas en la cohorte de objetivo.
     :param target_conditions: Lista de condiciones SQL para filtrar los datos en la cohorte de objetivo.
-    :param outcome_tables: Lista de nombres de tablas para la cohorte de resultado.
-    :param outcome_join_columns: Lista de pares de columnas para unir las tablas en la cohorte de resultado.
     :param outcome_conditions: Lista de condiciones SQL para filtrar los datos en la cohorte de resultado.
     :param target_cohort_name: Nombre de la tabla de cohorte de objetivo (opcional).
     :param outcome_cohort_name: Nombre de la tabla de cohorte de resultado (opcional).
@@ -76,7 +71,8 @@ def create_target_outcome_cohorts(db_path, target_tables, target_conditions,
     
     return target_cohort_df, outcome_cohort_df
 
-def extract_predictive_features_with_target(db_path, tables, where_conditions, feature_columns, target_table, target_join_column, target_condition, cohort_name):
+
+def extract_predictive_features_with_target(db_path, tables, feature_columns, target_table, target_condition, cohort_name):
     """
     Extrae las variables predictorias de una base de datos DuckDB y añade la columna 'target' a partir de una tabla de outcomes.
 
