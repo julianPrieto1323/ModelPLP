@@ -79,7 +79,8 @@ def create_target_outcome_cohorts(db_path, target_tables, target_conditions, out
     
     return target_cohort_df, outcome_cohort_df
 
-def extract_predictive_features_with_target(db_path, tables, feature_columns, target_table, target_condition, cohort_name, index_date_column):
+def extract_predictive_features(db_path, tables, feature_columns, target_table, target_condition, cohort_name, 
+                                index_date_column, start_date='2019-01-01', end_date='2023-01-01'):
     """
     Extrae las variables predictorias de una base de datos DuckDB y añade la columna 'target' a partir de una tabla de outcomes.
     
@@ -90,19 +91,29 @@ def extract_predictive_features_with_target(db_path, tables, feature_columns, ta
     :param target_condition: Condición que define el valor de 'target'.
     :param cohort_name: Nombre de la tabla de características predictoras resultante.
     :param index_date_column: Columna que define la fecha índice.
+    :param start_date: Fecha de inicio para la ventana de tiempo (por defecto '2019-01-01').
+    :param end_date: Fecha de fin para la ventana de tiempo (por defecto '2023-01-01').
     :return: DataFrame con las variables predictorias resultantes y la columna 'target'.
     """
     
     # Conectar a la base de datos
     con = duckdb.connect(database=db_path, read_only=False)
-    
-    # Crear la cláusula de combinación de tablas (features) y condiciones de JOIN
+    join_conditions = {
+    "visit_occurrence": "person.person_id = visit_occurrence.person_id",
+    "drug_exposure": "person.person_id = drug_exposure.person_id",
+    "condition_occurrence": "person.person_id = condition_occurrence.person_id"
+    }
+    # Construir la cláusula de combinación de tablas de manera dinámica usando join_conditions
     join_clauses = []
+    base_table = tables[0]  # La primera tabla es la base
+    tables_clause = f'"{base_table}"'
     
-    # Asumimos que la primera tabla es "person" y las otras tablas tienen relaciones de join con ella
-    tables_clause = f'"person" LEFT JOIN "visit_occurrence" ON person.person_id = visit_occurrence.person_id'
-    tables_clause += f' LEFT JOIN "drug_exposure" ON person.person_id = drug_exposure.person_id'
-    tables_clause += f' LEFT JOIN "condition_occurrence" ON person.person_id = condition_occurrence.person_id'
+    for table in tables[1:]:
+        if table in join_conditions:
+            join_condition = join_conditions[table]
+            tables_clause += f' LEFT JOIN "{table}" ON {join_condition}'
+        else:
+            raise ValueError(f"No join condition provided for table: {table}")
     
     # Crear la cláusula de selección de columnas, incluyendo el target
     feature_columns_clause = ', '.join([f'{table}.{col}' for table, cols in feature_columns.items() for col in cols])
@@ -112,7 +123,7 @@ def extract_predictive_features_with_target(db_path, tables, feature_columns, ta
     CREATE OR REPLACE TABLE {cohort_name} AS
     SELECT {feature_columns_clause},
            CASE WHEN {target_condition} THEN 1 ELSE 0 END AS target,
-           {index_date_column} BETWEEN '2019-01-01' AND '2023-01-01' AS within_time_window
+           {index_date_column} BETWEEN '{start_date}' AND '{end_date}' AS within_time_window
     FROM {tables_clause}
     """
     
