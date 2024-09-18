@@ -1,4 +1,4 @@
-# Patient Level Prediction (PLP) Project
+# Patient Level Prediction (PLP) Project V-2.0
 
 This project implements a Patient Level Prediction (PLP) study using the Observational Medical Outcomes Partnership (OMOP) data model. The objective of the study is to predict a clinical outcome from predictor variables derived from patient data.
 
