@@ -114,7 +114,7 @@ def crear_bbdd_desde_csv(carpeta_csv, ruta_bbdd):
     crear_bbdd_desde_csv('ruta/a/carpeta_csv', 'ruta/a/base_de_datos.duckdb')
     """
     # Crear una conexión a DuckDB y almacenar la base de datos en un archivo
-    conn = duckdb.connect(database=ruta_bbdd)
+    conn = duckdb.connect(database=ruta_bbdd, read_only=False)
     
     # Recorrer todos los archivos CSV en la carpeta especificada
     for archivo in os.listdir(carpeta_csv):
@@ -146,7 +146,7 @@ def eliminar_tabla(db_path, table_name):
         None
     """
     # Conectar a la base de datos DuckDB
-    conn = duckdb.connect(database=db_path, read_only=True)
+    conn = duckdb.connect(database=db_path, read_only=False)
 
     try:
         # Verificar si la tabla existe
@@ -182,7 +182,7 @@ def obtener_columnas(db_path, tabla):
     :param tabla: Nombre de la tabla.
     :return: Lista de nombres de columnas de la tabla.
     """
-    con = duckdb.connect(database=db_path, read_only=True)
+    con = duckdb.connect(database=db_path, read_only=False)
     query = f"DESCRIBE {tabla};"
     columnas_df = con.execute(query).df()
     con.close()
@@ -237,3 +237,4 @@ def generar_joins(db_path, tablas):
     # Unir las condiciones de JOIN con ' AND ' y eliminar posibles duplicados
     joins = list(set(joins))
     return ' AND '.join(joins), join_conditions
+
