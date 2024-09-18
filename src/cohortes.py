@@ -81,42 +81,38 @@ def create_target_outcome_cohorts(db_path, target_tables, target_conditions, out
 
 def extract_predictive_features_with_target(db_path, tables, feature_columns, target_table, target_condition, cohort_name, index_date_column):
     """
-    Extrae las variables predictorias basadas en la definición de PLP de OMOP y añade la columna 'target' a partir de una tabla de outcomes.
+    Extrae las variables predictorias de una base de datos DuckDB y añade la columna 'target' a partir de una tabla de outcomes.
     
     :param db_path: Ruta al archivo de base de datos DuckDB.
     :param tables: Lista de nombres de tablas a combinar.
-    :param feature_columns: Diccionario con tablas como claves y columnas de características como valores.
+    :param feature_columns: Diccionario con las columnas a seleccionar como variables predictorias por tabla.
     :param target_table: Nombre de la tabla que contiene los outcomes.
-    :param target_condition: Condición que define el valor de 'target' (ejemplo: "outcome.event = 1").
+    :param target_condition: Condición que define el valor de 'target'.
     :param cohort_name: Nombre de la tabla de características predictoras resultante.
-    :param index_date_column: Nombre de la columna que define la fecha índice (ej. fecha del evento diagnóstico).
-    :return: DataFrame con las variables predictorias y la columna 'target'.
+    :param index_date_column: Columna que define la fecha índice.
+    :return: DataFrame con las variables predictorias resultantes y la columna 'target'.
     """
     
     # Conectar a la base de datos
     con = duckdb.connect(database=db_path, read_only=False)
     
-    # Generar las cláusulas de JOIN a partir de las tablas
-    join_conditions = usoBBDD.generar_joins(db_path, tables)
-
-    # Construir la cláusula de combinación de tablas (features)
-    tables_clause = ' LEFT JOIN '.join([f'"{table}"' for table in tables])
+    # Crear la cláusula de combinación de tablas (features) y condiciones de JOIN
+    join_clauses = []
     
-    # Unir la tabla de target
-    tables_clause += f' LEFT JOIN "{target_table}" ON {join_conditions}'
+    # Asumimos que la primera tabla es "person" y las otras tablas tienen relaciones de join con ella
+    tables_clause = f'"person" LEFT JOIN "visit_occurrence" ON person.person_id = visit_occurrence.person_id'
+    tables_clause += f' LEFT JOIN "drug_exposure" ON person.person_id = drug_exposure.person_id'
+    tables_clause += f' LEFT JOIN "condition_occurrence" ON person.person_id = condition_occurrence.person_id'
     
-    # Generar la cláusula de selección de columnas de características
-    feature_columns_clause = ', '.join([f"{table}.{column}" for table, columns in feature_columns.items() for column in columns])
-    
-    # Agregar la fecha índice para calcular el periodo de tiempo en relación al outcome
-    time_window_clause = f"{index_date_column} BETWEEN '2019-01-01' AND '2023-01-01'"
+    # Crear la cláusula de selección de columnas, incluyendo el target
+    feature_columns_clause = ', '.join([f'{table}.{col}' for table, cols in feature_columns.items() for col in cols])
     
     # Construir la consulta SQL para extraer las variables predictorias y la columna target
     query = f"""
     CREATE OR REPLACE TABLE {cohort_name} AS
     SELECT {feature_columns_clause},
            CASE WHEN {target_condition} THEN 1 ELSE 0 END AS target,
-           {time_window_clause} AS within_time_window
+           {index_date_column} BETWEEN '2019-01-01' AND '2023-01-01' AS within_time_window
     FROM {tables_clause}
     """
     
