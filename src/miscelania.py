@@ -1,3 +1,5 @@
+import os
+
 def print_study_summary(feature_columns, target_condition, model_results):
     """
     Imprime el resumen del estudio PLP, explicando las características utilizadas, los resultados de los modelos
@@ -58,3 +60,12 @@ def print_study_summary(feature_columns, target_condition, model_results):
     
     print("\nConclusión general:")
     print("Los resultados muestran que algunos modelos, como el Árbol de Decisión o el Bosque Aleatorio, tienen un buen rendimiento con una precisión y F1-Score elevados. Sin embargo, otros modelos pueden requerir ajustes adicionales en los hiperparámetros o más datos para mejorar su rendimiento.")
+
+def crearDirectorio(save_path):
+        '''
+        Crea un directorio si no existe en la ruta pasada por parámetro
+        '''
+    # Verificar si el directorio de destino existe, si no, crearlo
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+            print(f"Directorio de destino {save_path} creado.")

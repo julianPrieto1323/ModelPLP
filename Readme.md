@@ -1,4 +1,4 @@
-# Patient Level Prediction (PLP) Project
+# Patient Level Prediction (PLP) Project V-2.0
 
 This project implements a Patient Level Prediction (PLP) study using the Observational Medical Outcomes Partnership (OMOP) data model. The objective of the study is to predict a clinical outcome from predictor variables derived from patient data.
 
@@ -25,6 +25,10 @@ This script runs the PLP study and trains a classification model, evaluating its
 
 This script shows metrics from the algorithims ran on the plp study.
 
+**usoBBDD.py**
+
+This script lets you execute querys to the DataBase
+
 **Main functions:**
 
 - **run_plp_with_algorithms**: Performs the entire PLP study flow. It includes creating cohorts, extracting the predictive features, training the prediction model and evaluating its accuracy. The algorithims are: Decision Tree, Random Forest, Logistic Regression, SVM, MLP Classifier.
@@ -49,15 +53,6 @@ Defines the clinical outcome to be predicted (e.g. diagnosis of a disease).
 **3. Extraction of Predictor Variables:** 
 
 Patient characteristics, such as medical visits, medication prescriptions and previous conditions, are extracted and will be used as input variables in the model.
-
-**4. Model Training:** 
-
-The `plp.py` script trains a classification model based on the input data, using an algorithm such as the `scikit-learn` decision tree.
-
-**5. Model Evaluation:** 
-
-Model performance is evaluated using `accuracy`, `recall` and `F1-score` metrics.
-
 
 ## Instructions for Executing the Project
 
@@ -89,3 +84,36 @@ This project is designed to be flexible and customizable. You can change the tab
 ## Dataset 
 
 The dataset used is located at [datasets](https://github.com/OHDSI/EunomiaDatasets/tree/3efd533eb95a41a56d5b0758b0d7c8fa57e1303e/datasets) and the CSV set in the Synthea folder has been used.
+
+
+## Usage/Examples
+This section describes the principal funtions of the repository
+
+### Downloading dataset
+The function loadSynthea lets you download the dataset Synthea to try the API with a CDM Dataset
+```python
+import peticiones from src
+peticiones.loadSynthea(path) 
+```
+### Creating a cohort
+This function lets you create a cohort from the full Dataset with specific characteristics
+
+```python
+import cohortes from src
+cohortes.create_cohort(db_path, conditions, cohort_name) 
+```
+### Extract predictive features
+This function lets you extract the predictives variables from a Database specifying the target feature.
+
+```python
+import cohortes from src
+cohortes.extract_predictive_features_with_target(db_path, cohort_name, target) 
+```
+
+### Cohort to pandas
+This function lets you convert the cohorts created to a pandas dataframe to use it for PLP study.
+
+```python
+import cohortes from src
+cohortes.cohort_to_pd(cohort_name) 
+```
