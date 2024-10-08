@@ -73,7 +73,7 @@ To install these packages you can run
 - Run the main notebook to train the model and obtain the results:
 
 `main.ipynb`
-
+        - In this notbook there are two blocks to create cohorts, the first one is a high level block where you can ask for the cohort characteristics without knowing SQL programming language.
 **3. Evaluation of Results:**
 - The `miscelania.py` script will print the model metrics, **precision**, **recall** and **F1-score**.
 
