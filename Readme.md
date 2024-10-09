@@ -1,4 +1,4 @@
-# Patient Level Prediction (PLP) Project V-2.0
+# Patient Level Prediction (PLP) Project V-3.0
 
 This project implements a Patient Level Prediction (PLP) study using the Observational Medical Outcomes Partnership (OMOP) data model. The objective of the study is to predict a clinical outcome from predictor variables derived from patient data.
 
@@ -102,12 +102,20 @@ This function lets you create a cohort from the full Dataset with specific chara
 import cohortes from src
 cohortes.create_cohort(db_path, conditions, cohort_name) 
 ```
+
+### Extract predictive features
+This function lets you create outcome cohort condirions from a Database specifying the target feature.
+
+```python
+import cohortes from src
+cohortes.create_target_outcome_cohorts_conditions(db_path, target_conditions, outcome_conditions) 
+
 ### Extract predictive features
 This function lets you extract the predictives variables from a Database specifying the target feature.
 
 ```python
 import cohortes from src
-cohortes.extract_predictive_features_with_target(db_path, cohort_name, target) 
+cohortes.extract_predictive_features_with_target(db_path, feature_conditions, target_conditions, outcome_conditions) 
 ```
 
 ### Cohort to pandas
